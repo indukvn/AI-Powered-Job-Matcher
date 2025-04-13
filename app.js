@@ -9,7 +9,7 @@ document.getElementById('jobForm').addEventListener('submit', async function (e)
     console.log('Form Data:', { skills, experience, preferences }); // Check if form data is correct
 
     // Send the data to the backend (POST request)
-    const response = await fetch('/match-job', {
+    const response = await fetch('https://ai-powered-job-matcher.onrender.com/match-job', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
