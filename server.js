@@ -67,6 +67,9 @@ Description: [Job Description]
             { headers: { Authorization: `Bearer ${process.env.HF_API_KEY}` } }
         );
 
+        // Log the response data for debugging
+        console.log("Hugging Face Response:", response.data);
+
         // Parse the response data into a more structured format
         const jobRecommendations = response.data[0].generated_text.split("\n").map((line) => {
             if (line.includes('Job Title:') && line.includes('Company:') && line.includes('Description:')) {
