@@ -1,20 +1,31 @@
-<!-- Form for job matching -->
-<h1>AI-Powered Job Matching</h1>
-<form id="jobForm">
-    <label for="skills">Enter your skills (comma separated):</label>
-    <input type="text" id="skills" name="skills" required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Job Matching</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>AI-Powered Job Matching</h1>
+    <form id="jobForm">
+        <label for="skills">Enter your skills (comma separated):</label>
+        <input type="text" id="skills" name="skills" required>
 
-    <label for="experience">Enter your experience (e.g., years in a role, areas of expertise):</label>
-    <input type="text" id="experience" name="experience" required>
+        <label for="experience">Enter your experience (e.g., years in a role, areas of expertise):</label>
+        <input type="text" id="experience" name="experience" required>
 
-    <label for="preferences">What type of job are you looking for?</label>
-    <input type="text" id="preferences" name="preferences" required>
+        <label for="preferences">What type of job are you looking for?</label>
+        <input type="text" id="preferences" name="preferences" required>
 
-    <button type="submit">Find Jobs</button>
-</form>
+        <button type="submit">Find Jobs</button>
+    </form>
 
-<!-- Section for displaying job results -->
-<div id="jobResults">
-    <h2>Job Recommendations:</h2>
-    <!-- Job results will appear here -->
-</div>
+    <div id="jobResults">
+        <h2>Job Recommendations:</h2>
+        <!-- Job results will appear here -->
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
