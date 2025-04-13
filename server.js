@@ -36,13 +36,14 @@ app.post('/match-job', async (req, res) => {
 
 // Function to get job recommendations from Hugging Face API
 async function getJobRecommendations(skills, experience, preferences) {
-    const prompt = `You are a job matching assistant. Based on the following information, recommend at least 3 suitable job titles, companies, and descriptions. Format the response clearly:
+    const prompt = `You are a job matching assistant. Based on the following information, recommend at least 3 suitable job titles, companies, and descriptions. Only provide job titles, company names, and descriptions, with no extra information.
 
 Skills: ${skills}
 Experience: ${experience}
 Preferences: ${preferences}
 
-Format the output as follows:
+Please provide at least 3 job recommendations in the following format:
+
 Job 1:
 Job Title: [Job Title]
 Company: [Company Name]
@@ -66,16 +67,16 @@ Description: [Job Description]
             { headers: { Authorization: `Bearer ${process.env.HF_API_KEY}` } }
         );
 
-        // Log the response to verify data
+        // Log the raw response for debugging purposes
         console.log("Hugging Face Response:", response.data);
 
         const jobRecommendations = [];
         const text = response.data[0].generated_text;
 
-        // Check if we are getting a structured response
+        // Extract only job-related information using a regex
         const jobPattern = /Job \d+:\s*Job Title:\s*(.*)\s*Company:\s*(.*)\s*Description:\s*(.*)/g;
         let match;
-        
+
         // Extract structured job data using regex
         while ((match = jobPattern.exec(text)) !== null) {
             jobRecommendations.push({
@@ -85,7 +86,8 @@ Description: [Job Description]
             });
         }
 
-        return jobRecommendations;
+        // If no job recommendations are found, return an empty array
+        return jobRecommendations.length > 0 ? jobRecommendations : [{ title: 'No job recommendations found', company: '', description: '' }];
 
     } catch (error) {
         console.error("Error during Hugging Face API call", error);
