@@ -36,14 +36,13 @@ app.post('/match-job', async (req, res) => {
 
 // Function to get job recommendations from Hugging Face API
 async function getJobRecommendations(skills, experience, preferences) {
-    const prompt = `You are a job matching assistant. Based on the following information, recommend suitable job titles, companies, and descriptions:
+    const prompt = `You are a job matching assistant. Based on the following information, recommend at least 3 suitable job titles, companies, and descriptions. Format the response clearly:
 
 Skills: ${skills}
 Experience: ${experience}
 Preferences: ${preferences}
 
-Please provide at least 3 job recommendations. Format the output clearly:
-
+Format the output as follows:
 Job 1:
 Job Title: [Job Title]
 Company: [Company Name]
@@ -67,24 +66,27 @@ Description: [Job Description]
             { headers: { Authorization: `Bearer ${process.env.HF_API_KEY}` } }
         );
 
-        // Log the response data for debugging
+        // Log the response to verify data
         console.log("Hugging Face Response:", response.data);
 
-        // Parse the response data into a more structured format
-        const jobRecommendations = response.data[0].generated_text.split("\n").map((line) => {
-            if (line.includes('Job Title:') && line.includes('Company:') && line.includes('Description:')) {
-                const jobDetails = line.split('Description:');
-                const titleAndCompany = jobDetails[0].split('Company:');
-                return {
-                    title: titleAndCompany[0].replace('Job Title:', '').trim(),
-                    company: titleAndCompany[1].trim(),
-                    description: jobDetails[1].trim(),
-                };
-            }
-            return null;
-        }).filter(job => job !== null);
+        const jobRecommendations = [];
+        const text = response.data[0].generated_text;
+
+        // Check if we are getting a structured response
+        const jobPattern = /Job \d+:\s*Job Title:\s*(.*)\s*Company:\s*(.*)\s*Description:\s*(.*)/g;
+        let match;
+        
+        // Extract structured job data using regex
+        while ((match = jobPattern.exec(text)) !== null) {
+            jobRecommendations.push({
+                title: match[1].trim(),
+                company: match[2].trim(),
+                description: match[3].trim(),
+            });
+        }
 
         return jobRecommendations;
+
     } catch (error) {
         console.error("Error during Hugging Face API call", error);
         return [];
