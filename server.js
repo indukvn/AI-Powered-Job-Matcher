@@ -5,8 +5,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-// Update the existing PORT definition if needed
-const PORT = process.env.PORT || 5000; // Use the correct port
 
 app.use(express.json());
 
@@ -37,6 +35,8 @@ app.post('/match-job', async (req, res) => {
         res.status(500).json({ error: 'Error matching jobs' });
     }
 });
+
+const PORT = process.env.PORT || 5000; 
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
