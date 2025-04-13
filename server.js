@@ -40,12 +40,23 @@ Skills: ${skills}
 Experience: ${experience}
 Preferences: ${preferences}
 
-Format the output as follows:
+Please provide at least 3 job recommendations. Format the output clearly:
+
+Job 1:
 Job Title: [Job Title]
 Company: [Company Name]
 Description: [Job Description]
 
-Provide at least 3 job recommendations.`;
+Job 2:
+Job Title: [Job Title]
+Company: [Company Name]
+Description: [Job Description]
+
+Job 3:
+Job Title: [Job Title]
+Company: [Company Name]
+Description: [Job Description]
+`;
 
     try {
         const response = await axios.post(
