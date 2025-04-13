@@ -67,17 +67,13 @@ Description: [Job Description]
             { headers: { Authorization: `Bearer ${process.env.HF_API_KEY}` } }
         );
 
-        // Log the raw response for debugging purposes
-        console.log("Hugging Face Response:", response.data);
-
         const jobRecommendations = [];
         const text = response.data[0].generated_text;
 
-        // Extract only job-related information using a regex
+        // Regex to ensure we extract relevant job data
         const jobPattern = /Job \d+:\s*Job Title:\s*(.*)\s*Company:\s*(.*)\s*Description:\s*(.*)/g;
         let match;
-
-        // Extract structured job data using regex
+        
         while ((match = jobPattern.exec(text)) !== null) {
             jobRecommendations.push({
                 title: match[1].trim(),
@@ -86,12 +82,10 @@ Description: [Job Description]
             });
         }
 
-        // If no job recommendations are found, return an empty array
         return jobRecommendations.length > 0 ? jobRecommendations : [{ title: 'No job recommendations found', company: '', description: '' }];
-
     } catch (error) {
         console.error("Error during Hugging Face API call", error);
-        return [];
+        return [{ title: 'Error fetching data from Hugging Face API', company: '', description: '' }];
     }
 }
 
