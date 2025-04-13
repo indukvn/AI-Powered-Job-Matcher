@@ -46,6 +46,9 @@ app.post('/match-job', async (req, res) => {
     }
 });
 
+const PORT = process.env.PORT || 5000; // Fallback to 5000 if PORT is not defined
+
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
+
