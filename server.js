@@ -37,7 +37,6 @@ app.post('/match-job', async (req, res) => {
 });
 
 const path = require('path');
-const app = express();
 
 // Serve static files from the root directory
 app.use(express.static(__dirname)); // Serve static files directly from the root
