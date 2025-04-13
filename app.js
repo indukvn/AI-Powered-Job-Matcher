@@ -31,10 +31,10 @@ function displayJobResults(data) {
 
     // Check if jobs array exists and has content
     if (data.jobs && data.jobs.length > 0) {
-        data.jobs.forEach(job => {
+        data.jobs.forEach((job, index) => {
             jobResults.innerHTML += `
                 <div class="job">
-                    <h3>${job.title}</h3>
+                    <h3>Job ${index + 1}: ${job.title}</h3>
                     <p><strong>Company:</strong> ${job.company}</p>
                     <p><strong>Description:</strong> ${job.description}</p>
                 </div>
