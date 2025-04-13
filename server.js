@@ -7,9 +7,11 @@ dotenv.config(); // To load environment variables
 
 const app = express();
 
+// Serve static files from the root directory
+app.use(express.static(__dirname));
+
 // Middleware to handle JSON requests
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Define route for the root (home page)
 app.get('/', (req, res) => {
