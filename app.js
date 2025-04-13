@@ -8,7 +8,7 @@ document.getElementById('jobForm').addEventListener('submit', async function (e)
 
     try {
         // Send the user input to the backend (POST request)
-        const response = await fetch('https://ai-powered-job-matcher.onrender.com/match-job', {
+        const response = await fetch('/match-job', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
