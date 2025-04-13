@@ -5,7 +5,7 @@ document.getElementById('jobForm').addEventListener('submit', async function (e)
     const experience = document.getElementById('experience').value;
     const preferences = document.getElementById('preferences').value;
 
-    const response = await fetch('https://your-heroku-api.herokuapp.com/match-job', {
+    const response = await fetch('https://ai-powered-job-matcher.onrender.com/match-job', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
