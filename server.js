@@ -36,8 +36,20 @@ app.post('/match-job', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 5000; 
+const express = require('express');
+const path = require('path');
+const app = express();
 
+// Serve static files from the root directory
+app.use(express.static(__dirname)); // Serve static files directly from the root
+
+// Define a route for the root path
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));  // Serve the index.html from the root directory
+});
+
+// Port setup
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
