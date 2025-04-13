@@ -6,8 +6,6 @@ document.getElementById('jobForm').addEventListener('submit', async function (e)
     const experience = document.getElementById('experience').value;
     const preferences = document.getElementById('preferences').value;
 
-    console.log('Form Data:', { skills, experience, preferences }); // Check if form data is correct
-
     // Send the data to the backend (POST request)
     const response = await fetch('https://ai-powered-job-matcher.onrender.com/match-job', {
         method: 'POST',
@@ -18,29 +16,24 @@ document.getElementById('jobForm').addEventListener('submit', async function (e)
     });
 
     const data = await response.json();
-    console.log('Received Data:', data); // Log the received data
 
-    // Display the job recommendations in the HTML
-    displayJobResults(data);
-});
+    // Clear the previous job recommendations
+    const jobRecommendationsContainer = document.getElementById('jobRecommendations');
+    jobRecommendationsContainer.innerHTML = ''; // Clear previous results
 
-// Function to display the job results on the page
-function displayJobResults(data) {
-    const jobResults = document.getElementById('jobResults');
-    jobResults.innerHTML = '<h2>Job Recommendations:</h2>'; // Reset the section
-
-    // Check if jobs array exists and has content
-    if (data.jobs && data.jobs.length > 0) {
-        data.jobs.forEach((job, index) => {
-            jobResults.innerHTML += `
-                <div class="job">
-                    <h3>Job ${index + 1}: ${job.title}</h3>
-                    <p><strong>Company:</strong> ${job.company}</p>
-                    <p><strong>Description:</strong> ${job.description}</p>
-                </div>
-            `;
-        });
+    // Display the job recommendations
+    if (data.jobs.length === 0) {
+        jobRecommendationsContainer.innerHTML = '<p>No job recommendations found.</p>';
     } else {
-        jobResults.innerHTML += `<p>No job recommendations found.</p>`;
+        data.jobs.forEach((job, index) => {
+            const jobElement = document.createElement('div');
+            jobElement.innerHTML = `
+                <p><strong>Job ${index + 1}:</strong></p>
+                <p><strong>Job Title:</strong> ${job.title}</p>
+                <p><strong>Company:</strong> ${job.company}</p>
+                <p><strong>Description:</strong> ${job.description}</p>
+            `;
+            jobRecommendationsContainer.appendChild(jobElement);
+        });
     }
-}
+});
