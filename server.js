@@ -1,38 +1,47 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const axios = require('axios');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.post('/match-job', async (req, res) => {
     const { skills, experience, preferences } = req.body;
 
     try {
-        // Call OpenAI's GPT-3 API to generate job recommendations
+        // Prepare prompt for job matching
+        const prompt = `Match jobs based on the following information:
+                        Skills: ${skills}
+                        Experience: ${experience}
+                        Preferences: ${preferences}
+                        Provide job titles, companies, and descriptions.`;
+
+        // API Call to Hugging Face Model
         const response = await axios.post(
-            'https://api.openai.com/v1/completions',
+            'https://api-inference.huggingface.co/models/gpt2',
             {
-                model: 'text-davinci-003',
-                prompt: `Match jobs based on the following information:\nSkills: ${skills}\nExperience: ${experience}\nPreferences: ${preferences}\nProvide job titles, companies, and descriptions.`,
-                max_tokens: 150,
+                inputs: prompt,
             },
             {
                 headers: {
-                    'Authorization': `Bearer YOUR_OPENAI_API_KEY`,
-                }
-            });
+                    Authorization: `Bearer ${process.env.HF_API_KEY}`,
+                },
+            }
+        );
 
-        const jobRecommendations = response.data.choices[0].text.trim().split("\n").map(line => {
+        // Extract job data from the response
+        const jobRecommendations = response.data[0].generated_text.split("\n").map(line => {
             const [title, company, description] = line.split(',');
             return { title, company, description };
         });
 
         res.json({ jobs: jobRecommendations });
     } catch (error) {
-        console.error('Error during GPT-3 call', error);
+        console.error('Error during Hugging Face API call', error);
         res.status(500).json({ error: 'Error matching jobs' });
     }
 });
